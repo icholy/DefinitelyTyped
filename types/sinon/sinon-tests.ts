@@ -867,6 +867,11 @@ function testStub() {
     const stub3 = sinon.stub(instance, "fooDeep").named("namedStubDeep");
     stub3.calledWith({ s: sinon.match.string });
 
+    let stub4: sinon.SinonStubbedMethod<typeof instance, "fooDeep">;
+    stub4 = sinon.stub(instance, "fooDeep")
+    // @ts-expect-error
+    stub4 = sinon.stub(instance, "foo");
+
     const pStub = sinon.stub(instance, "promiseFunc");
     pStub.resolves();
     pStub.resolves("foo");

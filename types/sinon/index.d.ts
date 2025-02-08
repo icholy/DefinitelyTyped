@@ -675,11 +675,7 @@ declare namespace Sinon {
          * An exception is thrown if the property is not already a function.
          * The original function can be restored by calling object.method.restore(); (or stub.restore();).
          */
-        <T, K extends keyof T>(
-            obj: T,
-            method: K,
-        ): T[K] extends (...args: infer TArgs) => infer TReturnValue ? SinonStub<TArgs, TReturnValue>
-            : SinonStub;
+        <T, K extends keyof T>(obj: T, method: K): SinonStubbedMethod<T, K>
     }
 
     interface SinonExpectation extends SinonStub {
@@ -1464,6 +1460,15 @@ declare namespace Sinon {
      * @template TType Type being stubbed.
      */
     type StubbableType<TType> = Function & { prototype: TType };
+
+    /**
+     * A stub for a method of an object type.
+     */
+    type SinonStubbedMethod<T, M extends keyof T> = T[M] extends (
+        ...args: infer TArgs
+    ) => infer TReturnValue
+        ? sinon.SinonStub<TArgs, TReturnValue>
+        : sinon.SinonStub;
 
     /**
      * An instance of a stubbed object type with functions replaced by stubs.
